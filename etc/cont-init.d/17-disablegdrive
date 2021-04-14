@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+# Copyright (c) 2019, PhysK
+# All rights reserved.
+
+DISABLE_GDRIVE=${DISABLE_GDRIVE:-false}
+
+
+if [ "${DISABLE_GDRIVE}" == "true" ] || ! grep -q gdrive /config/rclone-docker.conf; then
+    touch /etc/services.d/mount-gdrive/down
+    echo "-> Disabled Gdrive Mount <-"
+else
+    UFS_PATH=$(cat /tmp/ufstmp.path)
+    echo "${UFS_PATH}:/mnt/gdrive=NC" > /tmp/ufstmp.path
+fi

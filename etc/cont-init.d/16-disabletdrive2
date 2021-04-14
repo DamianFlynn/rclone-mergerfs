@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+# Copyright (c) 2019, PhysK
+# All rights reserved.
+
+DISABLE_TDRIVE2=${DISABLE_TDRIVE2:-false}
+
+if [ "${DISABLE_TDRIVE2}" == "true" ] || ! grep -q tdrive2 /config/rclone-docker.conf; then
+    touch /etc/services.d/mount-tdrive2/down
+    echo "-> Disabled tdrive2 Mount <-"
+else
+    UFS_PATH=$(cat /tmp/ufstmp.path)
+    echo "${UFS_PATH}:/mnt/tdrive2=NC" > /tmp/ufstmp.path
+fi
